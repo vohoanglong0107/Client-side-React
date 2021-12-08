@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login to your account</title>
+    <link rel="stylesheet" href="login.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Montserrat"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+    />
+  </head>
+  <body class="loginBody">
+    <div class="login">
+      <div class="loginWrapper">
+        <div class="loginLeft">
+          <h3 class="loginLogo">Blog App</h3>
+          <span class="loginDesc">
+            Login and post amazing things to everyone around the world!
+          </span>
+          <img class="imgLogo" src="../assets/images/logo.png" alt="" />
+        </div>
+        <div class="loginRight">
+          <form class="loginBox" onSubmit="handleSubmit()">
+            <h3 class="formTitle">Login</h3>
+            <input
+              placeholder="Email"
+              type="email"
+              required
+              class="loginInput"
+              ref="{email}"
+            />
+            <input
+              placeholder="Password"
+              type="password"
+              required
+              minlength="6"
+              class="loginInput"
+              ref="{password}"
+            />
+            <button class="loginButton" type="submit">Log In</button>
+
+            <button
+              class="loginRegisterButton"
+              onclick="parent.location='/templates/register/register.html'"
+            >
+              Create a New Account
+            </button>
+
+            <label
+              class="loginForgot form-link text-center"
+              onClick="showForgotPassword()"
+              >Forgot Password?</label
+            >
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="forgotPassword hidden" id="forgotPasswordForm">
+      <form
+        onSubmit="handleForgotPassword()"
+        class="popup-form fixed-top"
+        ref="{formRef}"
+        onClick="closeForgotPassword()"
+      >
+        <div class="auth-inner">
+          <label class="close-btn" onClick="closeForgotPassword()"
+            >&times;</label
+          >
+          <h3>Forgot Password</h3>
+          <div class="form-group">
+            <label class="form-label">Email:</label>
+            <input type="email" class="form-control" placeholder="Your email" />
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary btn-block form-btn">
+              Send Email
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <script src="login.js"></script>
+  </body>
+</html>

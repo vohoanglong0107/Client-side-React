@@ -1,0 +1,115 @@
+.registerBody {
+  padding: 1%;
+  background-color: #3282b8;
+}
+
+.register {
+  width: 97vw;
+  height: 97vh;
+  border-radius: 10px;
+  background-color: #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.registerWrapper {
+  width: 70%;
+  height: 70%;
+  display: flex;
+}
+
+.registerLeft,
+.registerRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.registerLogo {
+  font-size: 50px;
+  font-weight: 800;
+  color: #1775ee;
+  margin-bottom: 10px;
+}
+
+.registerDesc {
+  font-size: 24px;
+  width: 400px;
+  margin-bottom: 15px;
+}
+
+.imgLogo {
+  width: 200px;
+  height: 200px;
+}
+
+.registerBox {
+  height: 500px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.registerInput {
+  height: 50px;
+  border-radius: 10px;
+  border: 1px solid gray;
+  font-size: 18px;
+  padding-left: 20px;
+}
+
+.registerInput:focus {
+  outline: none;
+}
+
+.registerButton {
+  height: 50px;
+  border-radius: 10px;
+  border: none;
+  background-color: #1775ee;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.registerForgot {
+  text-align: center;
+  color: #1775ee;
+}
+
+.formTitle {
+  font-size: 50px;
+  font-weight: 800;
+  color: #1775ee;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.registerLoginButton {
+  width: 100%;
+  align-self: center;
+  height: 50px;
+  border-radius: 10px;
+  border: none;
+  background-color: #42b72a;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.registerLoginLink {
+  color: white;
+}
+
+.registerLoginLink:hover {
+  text-decoration: none;
+  color: white;
+}
