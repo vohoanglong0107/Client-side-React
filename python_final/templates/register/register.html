@@ -30,33 +30,33 @@
           <img class="imgLogo" src="../assets/images/logo.png" alt="" />
         </div>
         <div class="registerRight">
-          <form class="registerBox" onSubmit="handleLogin()">
+          <form class="registerBox" id="registerForm">
             <h3 class="formTitle">Sign Up</h3>
             <input
+              id="username"
               placeholder="Username"
               required
-              ref="{username}"
               class="registerInput"
             />
             <input
+              id="email"
               placeholder="Email"
               required
-              ref="{email}"
               class="registerInput"
               type="email"
             />
             <input
+              id="password"
               placeholder="Password"
               required
-              ref="{password}"
               class="registerInput"
               type="password"
               minlength="6"
             />
             <input
-              placeholder="Password Again"
+              id="confirmPassword"
+              placeholder="Confirm password"
               required
-              ref="{passwordAgain}"
               class="registerInput"
               type="password"
             />

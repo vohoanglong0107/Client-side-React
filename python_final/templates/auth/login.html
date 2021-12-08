@@ -18,6 +18,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
     />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <body class="loginBody">
     <div class="login">
@@ -30,14 +31,14 @@
           <img class="imgLogo" src="../assets/images/logo.png" alt="" />
         </div>
         <div class="loginRight">
-          <form class="loginBox" onSubmit="handleSubmit()">
+          <form class="loginBox" id="loginForm">
             <h3 class="formTitle">Login</h3>
             <input
               placeholder="Email"
               type="email"
               required
               class="loginInput"
-              ref="{email}"
+              id="email"
             />
             <input
               placeholder="Password"
@@ -45,7 +46,7 @@
               required
               minlength="6"
               class="loginInput"
-              ref="{password}"
+              id="password"
             />
             <button class="loginButton" type="submit">Log In</button>
 
@@ -70,7 +71,6 @@
       <form
         onSubmit="handleForgotPassword()"
         class="popup-form fixed-top"
-        ref="{formRef}"
         onClick="closeForgotPassword()"
       >
         <div class="auth-inner">
