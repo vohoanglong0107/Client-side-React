@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Python Final</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="profile.css">
+    </head>
+    <body>
+        <div class="body-container">
+            <header>
+                <nav class="navbar navbar-light navContainer">
+                    <a class="navBrand" href="#">Navbar</a>
+                    
+                    <div class="dropdown show">
+                        <!-- <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Dropdown link
+                        </a> -->
+                        <a href="#profile"><img src="../../public/assets/3135715.png" alt="user-icon" class="user-icon dropdown-toggle"></a>
+                      
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <a class="dropdown-item" href="#">Profile</a>
+                          <a class="dropdown-item" href="#">Logout</a>
+                        </div>
+                      </div>
+                </nav>
+            </header>
+            <main>
+                <div class="info">
+                    <div class="img-div">
+                        <img id="output" src="../../public/assets/3135715.png" alt="your image" class="image" /><br />
+                        <input type='file' onchange="loadFile(event);" name="myFile" id="myFile" /><br />
+                        <label for="myFile" class="button-choose-file">Choose file</label>
+                    </div>
+                    
+                    <form class="inputs-form">
+                        <div class="inputs-field container">
+                            <div class="input-div row">
+                                <label class="labels col-4">Email:</label>
+                                <input class="inputs col-8" type="text" placeholder="your email..." />
+                            </div>
+                            <div class="input-div row">
+                                <label class="labels col-4">Username:</label>
+                                <input class="inputs col-8" type="text" placeholder="your username..." />
+                            </div>
+                            <div class="input-div row">
+                                <label class="labels col-4">Password:</label>
+                                <input class="inputs col-8" type="password" placeholder="your password..." />
+                            </div>
+                        </div>
+                        <div class="buttons">
+                            <button class="news-button">Cancel</button>
+                            <button class="news-button" style="background-color: #FDB827;" onsubmit={handleOnSubmit}>Save</button>
+                        </div>
+                    </form>
+                    
+                </div>
+            </main>
+        </div>
+        
+        <script src="profile.js" async defer></script>
+    </body>
+</html>
