@@ -2,7 +2,7 @@
 
 set -x
 
-mypy app
-black app --check
-isort --check-only app
+mypy python_final
+black python_final --check
+isort --check-only python_final
 flake8 --max-line-length=88
