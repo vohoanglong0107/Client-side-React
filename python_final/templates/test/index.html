@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='UTF-8'>
+    <script src='https://unpkg.com/react@16.3.1/umd/react.production.min.js'></script>
+    <script src='https://unpkg.com/react-dom@16.3.1/umd/react-dom.production.min.js'></script>
+    <script src='https://unpkg.com/react-router-dom@5.2.1/umd/react-router-dom.min.js'></script>
+    <script src='https://unpkg.com/babel-standalone@6.26.0/babel.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.17.3/antd.min.js">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div id='root'></div>
+    <script type='text/babel'>
+      const Link = ReactRouterDOM.Link;
+      const Route = ReactRouterDOM.Route;
+
+      const App = () => (
+        <ReactRouterDOM.HashRouter>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/profile" component={Profile} />
+        </ReactRouterDOM.HashRouter>
+      )
+
+      const Home = () => (
+            <div class="container">
+              <header>
+                <nav class="navbar navbar-light navContainer">
+                    <a class="navBrand" href="#">Navbar</a>
+                    <div class="search">
+                        <input class="search-bar" type="text" placeholder="Search.."/>
+                        <button type="submit" class="search-button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="dropdown">
+                        <button class="dropbtn profile-icon-button" ><img src="../../public/assets/3135715.png" alt="user-icon" class="user-icon dropdown-toggle"/></button>
+                        <div  class="dropdown-content">
+                          <Link to="/profile">Profile</Link>
+                          <a href="#" >Logout</a>
+                        </div>
+                      </div>
+                </nav>
+            </header>
+                <main>
+                    <form class="news">
+                        <img src="../../public/assets/3135715.png" alt="user-icon" class="user-avatar"/> 
+                        <input class="news-text" placeholder="How are you today?" />
+                        <br />
+                        <div class="buttons">
+                            <button class="news-button">Upload!</button>
+                            <button class="news-button" style={{ backgroundColor: '#FDB827' }} onsubmit={() => console.log("Handle on submit")}>Post</button>
+                        </div>
+                    </form>
+                </main>
+            </div>
+          );
+
+        const Profile = () => {
+          return (
+            <div class="body-container">
+                <header>
+                    <nav class="navbar navbar-light navContainer">
+                        <a class="navBrand" href="#">Navbar</a>
+                        <div class="search">
+                            <input class="search-bar" type="text" placeholder="Search.."/>
+                            <button type="submit" class="search-button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="dropdown show">
+                            
+                            <a href="#profile"><img src="../../public/assets/3135715.png" alt="user-icon" class="user-icon dropdown-toggle"/></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="#">Profile</a>
+                            <a class="dropdown-item" href="#">Logout</a>
+                            </div>
+                        </div>
+                    </nav>
+                </header>
+                <main>
+                    <div class="info">
+                        <div class="img-div">
+                            <img id="output" src="../../public/assets/3135715.png" alt="your image" class="image" /><br />
+                            <input type='file' onchange="loadFile(event)" name="myFile" id="myFile" /><br />
+                            <label for="myFile" class="button-choose-file">Choose file</label>
+                        </div>
+                        
+                        <form class="inputs-form">
+                            <div class="inputs-field container">
+                                <div class="input-div row">
+                                    <label class="labels col-4">Email:</label>
+                                    <input class="inputs col-8" type="text" placeholder="your email..." />
+                                </div>
+                                <div class="input-div row">
+                                    <label class="labels col-4">Username:</label>
+                                    <input class="inputs col-8" type="text" placeholder="your username..." />
+                                </div>
+                                <div class="input-div row">
+                                    <label class="labels col-4">Password:</label>
+                                    <input class="inputs col-8" type="password" placeholder="your password..." />
+                                </div>
+                            </div>
+                            <div>
+                                <label class="follow">Followers: <i class="fa fa-user icon" aria-hidden="true"></i></label>
+                                <label class="follow">Following: <i class="fa fa-user icon" aria-hidden="true"></i></label>
+                            </div>
+                            <div class="buttons">
+                                <button class="profile-button">Cancel</button>
+                                <button class="profile-button" style={{ backgroundColor: '#FDB827' }} onsubmit={()=>console.log("handleOnSubmit")}>Save</button>
+                            </div>
+                            
+                        </form>
+                        
+                    </div>
+                </main>
+            </div>
+          );
+      }
+      ReactDOM.render(<App />, document.querySelector('#root'));
+    </script>
+  </body>
+</html>

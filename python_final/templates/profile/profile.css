@@ -45,8 +45,11 @@ body {
     padding: 10%;
     display: flex;
 }
+.buttons {
+    margin-top: 20px;
+}
 
-.news-button {
+.profile-button {
     border-radius: 1rem;
     padding: 5px 20px;
     border: none;
@@ -80,8 +83,6 @@ input[type="file"] { display: none; }
     left: 100px;
 }
 
-.container {
-}
 
 .labels {
     border-radius: 1.5rem;
@@ -102,4 +103,34 @@ input[type="file"] { display: none; }
 
 .input-div {
     margin-bottom: 20px;
+}
+.search {
+    background-color: #fff;
+    margin-left: 300px;
+    border-radius: 1rem;
+    padding: 5px 10px;
+
+}
+
+.search-bar {
+    border: none;
+    background-color: #fff;
+    
+}
+.search-bar:focus {
+    border: none;
+    outline: none;
+}
+.search-button {
+    background-color: #fff;
+    border: none;
+}
+
+.follow {
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+.icon {
+    margin-left: 20px;
 }
