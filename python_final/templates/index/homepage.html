@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Python Final</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <nav class="navbar navbar-light navContainer">
+                    <a class="navBrand" href="#">Navbar</a>
+                    <div class="search">
+                        <input class="search-bar" type="text" placeholder="Search..">
+                        <button type="submit" class="search-button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="dropdown show">
+                        
+                        <a href="#profile"><img src="../../public/assets/3135715.png" alt="user-icon" class="user-icon dropdown-toggle"></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <a class="dropdown-item" href="#">Profile</a>
+                          <a class="dropdown-item" href="#">Logout</a>
+                        </div>
+                      </div>
+                </nav>
+            </header>
+            <main>
+                <form class="news">
+                    <img src="../../public/assets/3135715.png" alt="user-icon" class="user-avatar"> 
+                    <input class="news-text" placeholder="How are you today?" />
+                    <br />
+                    <div class="buttons">
+                        <button class="news-button">Upload!</button>
+                        <button class="news-button" style="background-color: #FDB827;" onsubmit={handleOnSubmit}>Post</button>
+                    </div>
+                </form>
+            </main>
+        </div>
+        <script src="homepage.js" async defer></script>
+    </body>
+</html>

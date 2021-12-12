@@ -12,7 +12,7 @@ print(Path('.').absolute())
 
 @app.route('/')
 def send_js():
-    return send_from_directory(Path('.') / 'templates' / 'index', 'index.html')
+    return send_from_directory(Path('.') / 'templates' / 'test', 'index.html')
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=80)

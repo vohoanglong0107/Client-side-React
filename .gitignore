@@ -1,2 +1,4 @@
 **/__pycache__/**
 .vscode
+run.ps1
+install-poetry.py

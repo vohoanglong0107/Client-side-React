@@ -7,7 +7,7 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-.container {
+.body-container {
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -38,36 +38,18 @@ body {
     margin-left: 0;
 }
 
-.news {
+.info {
     min-height: 100px;
     background-color: aliceblue;
     border-radius: 0.5rem;
-    padding: 20px 100px;
+    padding: 10%;
+    display: flex;
 }
-.user-avatar {
-    width: 40px;
-    height: 40px;
-}
-
-.news-text {
-    margin-left: 20px;
-    padding: 10px 20px;
-    border-radius: 1.5rem;
-    border: none;
-    background-color: #fff;
-    width: 80%;
-}
-.news-text:focus {
-    border: 2px solid #0F4C75;
-    outline: #0F4C75;
-    background-color: #fff;
-}
-
 .buttons {
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
-.news-button {
+.profile-button {
     border-radius: 1rem;
     padding: 5px 20px;
     border: none;
@@ -79,6 +61,49 @@ body {
     font-weight: bold;
 }
 
+.image {
+    border-radius: 5rem;
+    height: 150px;
+    width: 150px;
+}
+input[type="file"] { display: none; }
+
+.button-choose-file {
+    color: #C85C5C;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: bold;
+    margin-left: 15px;
+    font-size: 1.5rem;
+}
+
+.inputs-form {
+    margin-top: 20px;
+    width: 60%;
+    position: relative;
+    left: 100px;
+}
+
+
+.labels {
+    border-radius: 1.5rem;
+    padding: 10px 20px;
+    border: none;
+    outline: none;
+    font-weight: bold;
+}
+
+.inputs {
+    border-radius: 1.5rem;
+    border: none;
+}
+.inputs:focus {
+    border: 2px solid #0F4C75;
+    outline: #0F4C75;
+}
+
+.input-div {
+    margin-bottom: 20px;
+}
 .search {
     background-color: #fff;
     margin-left: 300px;
@@ -99,4 +124,13 @@ body {
 .search-button {
     background-color: #fff;
     border: none;
+}
+
+.follow {
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+.icon {
+    margin-left: 20px;
 }
