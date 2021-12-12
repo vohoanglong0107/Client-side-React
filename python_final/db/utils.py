@@ -1,10 +1,12 @@
+from python_final.models.posts import Post
 from python_final.models.users import User
 from python_final.models.roles import Role
+from python_final.models.comments import Comment
 from python_final.core.security import get_password_hash
 
 
-def get_user(username, db_session):
-    return db_session.query(User).filter(User.id == username).first()
+def get_user(identity, db_session):
+    return db_session.query(User).filter(User.id == identity).first()
 
 
 def check_if_user_is_active(user):
@@ -73,19 +75,101 @@ def get_users(db_session):
 
 
 def create_user(
-    db_session, username, password, first_name=None, last_name=None, is_superuser=False
+    db_session, username, email, password, role_id
 ):
     user = User(
-        email=username,
-        password=get_password_hash(password),
-        first_name=first_name,
-        last_name=last_name,
-        is_superuser=is_superuser,
+        username=username,
+        email=email,
+        password_hash=get_password_hash(password),
+        role_id=role_id
     )
     db_session.add(user)
     db_session.commit()
     db_session.refresh(user)
     return user
+
+
+def create_post(
+    db_session, body, author_id
+):
+    post = Post(
+        body=body,
+        author_id=author_id,
+    )
+    db_session.add(post)
+    db_session.commit()
+    db_session.refresh(post)
+    return post
+
+
+def update_post(
+    db_session, post_id, body
+):
+    post = Post(
+        id=post_id,
+        body=body,
+    )
+    db_session.add(post)
+    db_session.commit()
+    db_session.refresh(post)
+    return post
+
+
+def get_post_by_user_id(
+    db_session, author_id
+) -> Post:
+    return db_session.query(Post).filter(Post.author_id == author_id).all()
+
+
+def delete_post(
+    db_session, post_id
+) -> Post:
+    post = db_session.query(Post).get(post_id)
+    db_session.delete(post)
+    db_session.commit()
+    return post
+
+
+def create_comment(
+    db_session, body, post_id, author_id
+):
+    comment = Comment(
+        body=body,
+        post_id=post_id,
+        author_id=author_id,
+    )
+    db_session.add(comment)
+    db_session.commit()
+    db_session.refresh(comment)
+    return comment
+
+
+def update_comment(
+    db_session, comment_id, body
+):
+    comment = Comment(
+        id=comment_id,
+        body=body,
+    )
+    db_session.add(comment)
+    db_session.commit()
+    db_session.refresh(comment)
+    return comment
+
+
+def get_comment_by_post_id(
+    db_session, post_id
+) -> Comment:
+    return db_session.query(Comment).filter(Comment.post_id == post_id).all()
+
+
+def delete_comment(
+    db_session, comment_id
+) -> Comment:
+    comment = db_session.query(Comment).get(comment_id)
+    db_session.delete(comment)
+    db_session.commit()
+    return comment
 
 
 def assign_role_to_user(role: Role, user: User, db_session):

@@ -1,21 +1,14 @@
 from sqlalchemy.orm import backref, relationship
-from sqlalchemy.sql.schema import ForeignKey, Column
+from sqlalchemy.sql.schema import ForeignKey, Column, Table
 from sqlalchemy.sql.sqltypes import Integer, String
 
 from python_final.db.base_class import Base
 
 
-class Follow(Base):
-    follower_id = Column(
-        Integer,
-        ForeignKey("User.id"),
-        primary_key=True,
-    )
-    following_id = Column(
-        Integer,
-        ForeignKey("User.id"),
-        primary_key=True,
-    )
+Follow = Table('Follow', Base.metadata,
+    Column('follower_id', Integer, ForeignKey('User.id'), primary_key=True),
+    Column('following_id', Integer, ForeignKey('User.id'), primary_key=True)
+)
 
 
 class User(Base):
@@ -31,7 +24,7 @@ class User(Base):
     following = relationship(
         "User",
         secondary=Follow,
-        primaryjoin=id == Follow.follower_id,
-        secondaryjoin=id == Follow.following_id,
+        primaryjoin=id == Follow.c.follower_id,
+        secondaryjoin=id == Follow.c.following_id,
         backref="followers",
     )

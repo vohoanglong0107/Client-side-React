@@ -37,8 +37,6 @@ def route_login_access_token(username, password):
 
     if not user or not verify_password(password, get_user_hashed_password(user)):
         abort(400, "Incorrect email or password")
-    elif not user.is_active:
-        abort(400, "Inactive user")
     access_token_expires = timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES)
     return {
         "access_token": create_access_token(

@@ -13,5 +13,6 @@ jwt = JWTManager(app)
 
 
 @jwt.user_lookup_loader
-def get_current_user(identity):
+def get_current_user(_jwt_header, jwt_data):
+    identity = jwt_data["sub"]
     return get_user(identity, db_session)

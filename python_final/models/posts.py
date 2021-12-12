@@ -12,3 +12,4 @@ class Post(Base):
     author_id = Column(Integer, ForeignKey('User.id'))
     author = relationship('User', back_populates='posts')
     comments = relationship('Comment', back_populates='post')
+    # TODO: add like and heart

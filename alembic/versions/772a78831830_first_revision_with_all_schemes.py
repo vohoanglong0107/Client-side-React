@@ -33,6 +33,7 @@ def upgrade():
     op.create_table(
         "User",
         sa.Column("id", sa.Integer(), nullable=False),
+        sa.Column("email", sa.String(), nullable=False),
         sa.Column("username", sa.String(), nullable=False),
         sa.Column("password_hash", sa.String(), nullable=False),
         sa.Column("role_id", sa.Integer(), nullable=False),
@@ -48,6 +49,7 @@ def upgrade():
         sa.ForeignKeyConstraint(["author_id"], ["User.id"],),
         sa.PrimaryKeyConstraint("id"),
     )
+    # TODO: add like and heart
     op.create_table(
         "Comment",
         sa.Column("id", sa.Integer(), nullable=False),
@@ -58,6 +60,23 @@ def upgrade():
         sa.ForeignKeyConstraint(["author_id"], ["User.id"],),
         sa.ForeignKeyConstraint(["post_id"], ["Post.id"],),
         sa.PrimaryKeyConstraint("id"),
+    )
+    # TODO: add like and heart
+    op.create_table(
+        "Follow",
+        sa.Column("follower_id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(["follower_id"], ["User.id"],),
+        sa.Column("following_id", sa.Integer(), nullable=False),
+        sa.ForeignKeyConstraint(["following_id"], ["User.id"],),
+    )
+    op.create_table(
+        "Profile",
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.Column("fullname", sa.String(), nullable=False),
+        sa.Column("location", sa.String(), nullable=False),
+        sa.Column("about_me", sa.String(), nullable=False),
+        sa.Column("member_since", sa.TIMESTAMP(), server_default=sa.func.now()),
+        sa.Column("last_seen", sa.TIMESTAMP(), server_default=sa.func.now()),
     )
 
 

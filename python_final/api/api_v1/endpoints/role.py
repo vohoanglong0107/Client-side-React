@@ -52,22 +52,17 @@ def route_roles_post(name=None):
 
 @docs.register
 @doc(
-    description="Retrieve the roles of the user",
+    description="Retrieve the role of the user",
     security=security_params,
     tags=["roles"],
 )
 @app.route(f"{config.API_V1_STR}/roles/", methods=["GET"])
-@marshal_with(RoleSchema())
+@marshal_with(RoleSchema(many=True))
 @jwt_required()
 def route_roles_get():
     current_user = get_current_user()  # type: User
 
     if not current_user:
         abort(400, "Could not authenticate user with provided token")
-    elif not check_if_user_is_active(current_user):
-        abort(400, "Inactive user")
 
-    if check_if_user_is_superuser(current_user):
-        return get_roles(db_session)
-    else:
-        return get_user_roles(current_user)
+    return get_roles(db_session)

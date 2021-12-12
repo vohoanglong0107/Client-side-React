@@ -8,7 +8,7 @@ from python_final.db.base_class import Base
 
 
 class Profile(Base):
-    id = Column(Integer, ForeignKey('Users.id'), primary_key=True)
+    id = Column(Integer, ForeignKey('User.id'), primary_key=True)
     user = relationship('User', back_populates='profile', uselist=False)
     fullname = Column(String, index=True)
     location = Column(String)
