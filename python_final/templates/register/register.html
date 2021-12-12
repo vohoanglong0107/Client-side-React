@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <link rel="stylesheet" href="register.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Montserrat"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+    />
+  </head>
+  <body class="registerBody">
+    <div class="register">
+      <div class="registerWrapper">
+        <div class="registerLeft">
+          <h3 class="registerLogo">Blog App</h3>
+          <span class="registerDesc">
+            Don't have an account? Sign Up to be a member of our community!
+          </span>
+          <img class="imgLogo" src="../assets/images/logo.png" alt="" />
+        </div>
+        <div class="registerRight">
+          <form class="registerBox" id="registerForm">
+            <h3 class="formTitle">Sign Up</h3>
+            <input
+              id="username"
+              placeholder="Username"
+              required
+              class="registerInput"
+            />
+            <input
+              id="email"
+              placeholder="Email"
+              required
+              class="registerInput"
+              type="email"
+            />
+            <input
+              id="password"
+              placeholder="Password"
+              required
+              class="registerInput"
+              type="password"
+              minlength="6"
+            />
+            <input
+              id="confirmPassword"
+              placeholder="Confirm password"
+              required
+              class="registerInput"
+              type="password"
+            />
+            <button class="registerButton" type="submit">Sign Up</button>
+            <button
+              class="registerLoginButton"
+              onclick="parent.location='/templates/auth/login.html'"
+            >
+              Log into Account
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="register.js"></script>
+  </body>
+</html>
