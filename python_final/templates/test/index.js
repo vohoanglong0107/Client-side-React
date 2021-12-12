@@ -30,48 +30,47 @@ const data = [
 	loves: 0,
 	comments : 0,
 	commentText: []
-},
-{
-	postID: 2,
-	avatar: "",
-	username: "thanhcute03",
-	content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-	loves: 12,
-	comments: 4,
-	commentText: [
-		{
-			avatar: "../assets/3135715.png",
-			username: "thanhcute02",
-			comment: "great Sum!"
-		},
-		{
-			avatar: "../assets/3135715.png",
-			username: "thanhcute03",
-			comment: "great Sum! ayoooooooooooooooooo"
-		},
-		{
-			avatar: "../assets/3135715.png",
-			username: "thanhcute04",
-			comment: "niceeeeeeeeeeeeeeeeeeeeeeeeeee"
-		},
-		{
-			avatar: "../assets/3135715.png",
-			username: "thanhcute05",
-			comment: "great Summmmmmmmmmmmmmmmmmmmm!"
-		}
-	]
-}
-	
+	},
+	{
+		postID: 2,
+		avatar: "",
+		username: "thanhcute03",
+		content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+		loves: 12,
+		comments: 4,
+		commentText: [
+			{
+				avatar: "../assets/3135715.png",
+				username: "thanhcute02",
+				comment: "great Sum!"
+			},
+			{
+				avatar: "../assets/3135715.png",
+				username: "thanhcute03",
+				comment: "great Sum! ayoooooooooooooooooo"
+			},
+			{
+				avatar: "../assets/3135715.png",
+				username: "thanhcute04",
+				comment: "niceeeeeeeeeeeeeeeeeeeeeeeeeee"
+			},
+			{
+				avatar: "../assets/3135715.png",
+				username: "thanhcute05",
+				comment: "great Summmmmmmmmmmmmmmmmmmmm!"
+			}
+		]
+	}
 ]
 
 
 
 const App = () => {
-	
 	return (
 		<ReactRouterDOM.HashRouter>
 			<Route exact path="/" component={Home} />
 			<Route exact path="/profile" component={Profile} />
+			<Route exact path="/search" component={Search} />
 		</ReactRouterDOM.HashRouter>
 	)
 }
@@ -271,6 +270,7 @@ const Home = () => {
 
 	)
 }
+
 const Profile = () => {
 	const [ followers,  setFollowers ] = useState(0)
 	const [ following, setFollowing ] = useState(0)
@@ -329,6 +329,71 @@ const Profile = () => {
 							<button class="profile-button" style={{ backgroundColor: '#FDB827' }} onsubmit={()=>console.log("handleOnSubmit")}>Save</button>
 						</div>
 					</form>
+				</div>
+			</main>
+		</div>
+	);
+}
+
+const Search = () => {
+	const [ listUser, setListUser ] = useState([]);
+
+	useEffect(() => {
+		// const txtSearch = localStorage.getItem("txtSearch");
+		// if (txtSearch !== "") {
+		// 	document.getElementsByClassName("search-bar").value = txtSearch;
+
+		// 	axios.post("...", {txtSearch: txtSearch}).then(res => {
+		// 		setListUser(res.data) 
+		// 	}).catch(e => {
+		// 		console.log(e);
+		// 	});
+		// }
+		setListUser([
+			{
+				id: 1,
+				avatar: "https://ict-imgs.vgcloud.vn/2020/09/01/19/huong-dan-tao-facebook-avatar.jpg",
+				username: "Tuan Kiet",
+				email: "tuankietnk2001@gmail.com",
+				num_following: 50,
+				num_followed: 100,
+				is_followed: true,
+			},
+			{
+				id: 2,
+				avatar: "https://ict-imgs.vgcloud.vn/2020/09/01/19/huong-dan-tao-facebook-avatar.jpg",
+				username: "Hoang Long",
+				email: "hoanglong@gmail.com",
+				num_following: 50,
+				num_followed: 100,
+				is_followed: false
+			}
+		])
+	}, [])
+
+	return (
+		<div class="body-container">
+			<header>
+				<Navbar />
+			</header>
+			<main>
+				<div id="users-container">
+					{
+						listUser.map(user => {
+							return (
+								<div class="user-div" id={user.id}>
+									<img class="avatar" src={user.avatar}/>
+									<div class="user-info-div">
+										<p class="user-info-bold">{user.username}</p>
+										<p class="user-info">Email: {user.email}</p>
+										<p class="user-info">Following {user.num_following}</p>
+										<p class="user-info">{user.num_followed} followed</p>
+									</div>
+									{!user.is_followed && <i class="fa fa-plus-circle btn-follow" />}
+								</div>
+							)
+						})
+					}
 				</div>
 			</main>
 		</div>

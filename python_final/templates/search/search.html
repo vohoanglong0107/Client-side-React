@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Python Final</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search User</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -17,7 +15,8 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="search.css" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <div class="container">
@@ -45,27 +44,9 @@
         </nav>
       </header>
       <main>
-        <form class="news">
-          <img
-            src="../../public/assets/3135715.png"
-            alt="user-icon"
-            class="user-avatar"
-          />
-          <input class="news-text" placeholder="How are you today?" />
-          <br />
-          <div class="buttons">
-            <button class="news-button">Upload!</button>
-            <button
-              class="news-button"
-              style="background-color: #fdb827"
-              onsubmit="{handleOnSubmit}"
-            >
-              Post
-            </button>
-          </div>
-        </form>
+        <div id="users-container"></div>
       </main>
     </div>
-    <script src="homepage.js" async defer></script>
+    <script src="search.js"></script>
   </body>
 </html>
