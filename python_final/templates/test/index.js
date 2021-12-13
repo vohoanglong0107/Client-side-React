@@ -64,8 +64,6 @@ const data = [
 	
 ]
 
-
-
 const App = () => {
 	
 	return (
@@ -108,15 +106,6 @@ const Home = () => {
 	const [ datas, setDatas ] = useState(data)
 	const [ input, setInput ] = useState("")
 
-	// const [ newPost, setNewPost ] = useState({
-	// 	avatar: "",
-	// 	username: "",
-	// 	content: "",
-	// 	loves: 0,
-	// 	comments: 0,
-	// 	comment: []
-	// })
-	
 	const handleAddPost = async () => {
 		let obj = {
 			postID: data.length + 1,
@@ -272,6 +261,8 @@ const Home = () => {
 	)
 }
 const Profile = () => {
+	const [ isUser, setIsUser ] = useState(true)
+	const [ isFollowed, setIsFollowed ] = useState(true)
 	const [ followers,  setFollowers ] = useState(0)
 	const [ following, setFollowing ] = useState(0)
 	const [selectedImage, setSelectedImage] = useState(null);
@@ -292,7 +283,6 @@ const Profile = () => {
 							<img alt="not fount" width={"250px"} class="image" src={URL.createObjectURL(selectedImage)} />
 						)}
 						<br />
-						
 						<label  class="button-choose-file" for="myImage">Select a file</label>
 						<input
 							id="myImage"
@@ -323,6 +313,13 @@ const Profile = () => {
 						<div>
 							<label class="follow">Followers: {followers}<i class="fa fa-user icon" aria-hidden="true"></i></label>
 							<label class="follow">Following: {following}<i class="fa fa-user icon" aria-hidden="true"></i></label>
+							
+							{isUser? "" : (
+								<button onClick={()=>setIsFollowed(!isFollowed)} class={isFollowed? 'follow-button is-followed' : 'follow-button is-not-followed' }>
+									{isFollowed? <p>Followed</p> : <p>Follow</p> }
+								</button>
+							)}
+							
 						</div>
 						<div class="buttons">
 							<button class="profile-button">Cancel</button>
