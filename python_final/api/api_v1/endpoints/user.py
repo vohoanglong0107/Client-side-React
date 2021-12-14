@@ -3,7 +3,6 @@
 # Import installed modules
 # # Import installed packages
 from flask import abort
-from flask_jwt_extended.utils import get_jwt_identity
 from webargs import fields
 from flask_apispec import doc, use_kwargs, marshal_with
 from flask_jwt_extended import get_current_user, jwt_required
@@ -13,14 +12,15 @@ from python_final.api.api_v1.api_docs import docs, security_params
 from python_final.core import config
 from python_final.db.flask_session import db_session
 from python_final.db.utils import (
-    check_if_user_is_active,
-    check_if_user_is_superuser,
-    get_users,
+    follow_user_by_id,
+    get_followers_by_user_id,
+    get_user_by_email,
+    get_user_id,
+    update_profile_by_id,
     get_user_by_username,
     create_user,
     get_user_by_id,
-    get_role_by_id,
-    assign_role_to_user,
+    unfollow_user_by_id,
 )
 
 from python_final.main import app
@@ -34,8 +34,8 @@ from python_final.models.roles import Role
 
 
 @docs.register
-@doc(description="Create new user without the need to be logged in", tags=["users"])
-@app.route(f"{config.API_V1_STR}/users/create", methods=["POST"])
+@doc(description="Register new user without the need to be logged in", tags=["users"])
+@app.route(f"{config.API_V1_STR}/users/register", methods=["POST"])
 @use_kwargs(
     {
         "username": fields.Str(required=True),
@@ -46,8 +46,13 @@ from python_final.models.roles import Role
 )
 @marshal_with(UserSchema())
 def route_users_post_open(username, email, password, role_id):
-    user = get_user_by_username(email, db_session)
+    user = get_user_by_username(username, db_session)
 
+    if user:
+        return abort(
+            400, f"The user with this username already exists in the system: {username}"
+        )
+    user = get_user_by_email(email, db_session)
     if user:
         return abort(
             400, f"The user with this email already exists in the system: {email}"
@@ -66,6 +71,8 @@ def route_users_me_get():
     current_user: User = get_current_user()
     if not current_user:
         abort(400, "Could not authenticate user with provided token")
+    current_user.number_of_followers = len(current_user.followers)
+    current_user.number_of_following = len(current_user.following)
     return current_user
 
 
@@ -79,44 +86,80 @@ def route_users_id_get(user_id):
 
     if not current_user:
         abort(400, "Could not authenticate user with provided token")
-    elif not check_if_user_is_active(current_user):
-        abort(400, "Inactive user")
 
     user = get_user_by_id(user_id, db_session)
 
     if not user:
         return abort(400, f"The user with id: {user_id} does not exists")
-
+    current_user.number_of_followers = len(current_user.followers)
+    current_user.number_of_following = len(current_user.following)
     return user
 
 
 @docs.register
 @doc(
-    description="Assign a role to a user by ID",
+    description="Follow a user by ID",
     security=security_params,
     tags=["users"],
 )
-@app.route(f"{config.API_V1_STR}/users/<int:user_id>/roles/", methods=["POST"])
-@use_kwargs({"role_id": fields.Int(required=True)})
+@app.route(f"{config.API_V1_STR}/users/<int:user_id>/follow/", methods=["POST"])
 @marshal_with(UserSchema())
 @jwt_required()
-def route_users_assign_role_post(user_id, role_id):
+def route_users_follow(user_id):
     current_user: User = get_current_user()
 
     if not current_user:
         abort(400, "Could not authenticate user with provided token")
-    elif not check_if_user_is_active(current_user):
-        abort(400, "Inactive user")
-    elif not check_if_user_is_superuser(current_user):
-        abort(404, "Not authorized")
 
     user = get_user_by_id(user_id, db_session)
     if not user:
         return abort(400, f"The user with id: {user_id} does not exists")
 
-    role = get_role_by_id(role_id, db_session)
-    if not role:
-        return abort(400, f"The role does not exist")
-
-    updated_user = assign_role_to_user(role, user, db_session)
+    updated_user = follow_user_by_id(db_session, get_user_id(current_user), user_id)
     return updated_user
+
+
+@docs.register
+@doc(
+    description="Unfollow a user by ID",
+    security=security_params,
+    tags=["users"],
+)
+@app.route(f"{config.API_V1_STR}/users/<int:user_id>/unfollow/", methods=["POST"])
+@marshal_with(UserSchema())
+@jwt_required()
+def route_users_unfollow(user_id):
+    current_user: User = get_current_user()
+
+    if not current_user:
+        abort(400, "Could not authenticate user with provided token")
+
+    user = get_user_by_id(user_id, db_session)
+    if not user:
+        return abort(400, f"The user with id: {user_id} does not exists")
+
+    updated_user = unfollow_user_by_id(db_session, get_user_id(current_user), user_id)
+    return updated_user
+
+
+@docs.register
+@doc(
+    description="Get all followers of a user by ID",
+    security=security_params,
+    tags=["users"],
+)
+@app.route(f"{config.API_V1_STR}/users/<int:user_id>/followers/", methods=["GET"])
+@marshal_with(UserSchema(many=True))
+@jwt_required()
+def route_user_get_followers(user_id):
+    current_user: User = get_current_user()
+
+    if not current_user:
+        abort(400, "Could not authenticate user with provided token")
+
+    user = get_user_by_id(user_id, db_session)
+    if not user:
+        return abort(400, f"The user with id: {user_id} does not exists")
+
+    followers = get_followers_by_user_id(db_session, user_id)
+    return followers

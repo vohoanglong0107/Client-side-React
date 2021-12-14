@@ -8,3 +8,5 @@ class UserSchema(Schema):
     email = fields.Email(required=True)
     username = fields.Str(required=True)
     role = fields.Nested(RoleSchema, required=True)
+    number_of_followers = fields.Int(required=False)
+    number_of_following = fields.Int(required=False)

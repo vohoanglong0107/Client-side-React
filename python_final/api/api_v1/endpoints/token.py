@@ -12,7 +12,7 @@ from ..api_docs import docs, security_params
 from python_final.core import config
 from python_final.core.security import verify_password
 from python_final.db.flask_session import db_session
-from python_final.db.utils import get_user_by_username, get_user_hashed_password, get_user_id
+from python_final.db.utils import get_user_by_email, get_user_by_username, get_user_hashed_password, get_user_id
 from python_final.main import app
 
 # Import Schemas
@@ -34,6 +34,8 @@ from python_final.schemas.users import UserSchema
 @marshal_with(TokenSchema())
 def route_login_access_token(username, password):
     user = get_user_by_username(username, db_session)
+    if not user:
+        user = get_user_by_email(username, db_session)
 
     if not user or not verify_password(password, get_user_hashed_password(user)):
         abort(400, "Incorrect email or password")

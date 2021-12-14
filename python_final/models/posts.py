@@ -10,6 +10,6 @@ class Post(Base):
     id = Column(Integer, primary_key=True)
     body = Column(String)
     author_id = Column(Integer, ForeignKey('User.id'))
+    heart_count = Column(Integer, default=0)
     author = relationship('User', back_populates='posts')
     comments = relationship('Comment', back_populates='post')
-    # TODO: add like and heart

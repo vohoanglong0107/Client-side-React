@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
-    <link rel="stylesheet" href="register.css" />
+    <link rel="stylesheet" href="/register/register.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -18,6 +18,8 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
     />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <body class="registerBody">
     <div class="register">
@@ -63,7 +65,7 @@
             <button class="registerButton" type="submit">Sign Up</button>
             <button
               class="registerLoginButton"
-              onclick="parent.location='/templates/auth/login.html'"
+              onclick="parent.location='/login'"
             >
               Log into Account
             </button>
@@ -71,6 +73,6 @@
         </div>
       </div>
     </div>
-    <script src="register.js"></script>
+    <script src="/register/register.js"></script>
   </body>
 </html>

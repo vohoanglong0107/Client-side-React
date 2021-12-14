@@ -13,12 +13,9 @@ from python_final.api.api_v1.api_docs import docs, security_params
 from python_final.core import config
 from python_final.db.flask_session import db_session
 from python_final.db.utils import (
-    check_if_user_is_active,
-    check_if_user_is_superuser,
     get_role_by_name,
     create_role,
     get_roles,
-    get_user_roles,
 )
 
 # Import Schemas
@@ -38,10 +35,6 @@ def route_roles_post(name=None):
     current_user = get_current_user()
     if not current_user:
         abort(400, "Could not authenticate user with provided token")
-    elif not check_if_user_is_active(current_user):
-        abort(400, "Inactive user")
-    elif not check_if_user_is_superuser(current_user):
-        abort(400, "Not a superuser")
 
     role = get_role_by_name(name, db_session)
     if role:

@@ -15,16 +15,15 @@ loginForm.addEventListener("submit", e => {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
     
-    // TODO: send axios login request with email and password
-    axios.post("...", {email: email, password: password}).then((res) => {
-        if (res.data.message === 'Authentication successful!'){
-            localStorage.setItem('token', res.data.token);
-            axios.defaults.headers.common['Authorization'] = res.data.token;
-            parent.location='...' // Link to home page
+    axios.post("/api/v1/login/access-token", {username: email, password: password}).then((res) => {
+        if (res.status === 200){
+            localStorage.setItem('token', res.data.access_token);
+            // TODO: redirect to homepage
+            parent.location='/' // Link to home page
         }
         else {
             document.getElementById("password").value = ""
-            alert(res.data.message);
+            alert(res.data.msg);
         }
     }).catch(e => {
         console.log(e);

@@ -40,16 +40,18 @@ def upgrade():
         sa.ForeignKeyConstraint(["role_id"], ["Role.id"],),
         sa.PrimaryKeyConstraint("id"),
     )
+    op.create_index("ix_user_email", "User", ["email"], unique=True)
+    op.create_index("ix_user_username", "User", ["username"], unique=True)
     op.create_table(
         "Post",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("title", sa.String(), nullable=False),
-        sa.Column("content", sa.String(), nullable=False),
+        sa.Column("body", sa.String(), nullable=False),
+        sa.Column("heart_count", sa.Integer(), nullable=False, default=0),
         sa.Column("author_id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(["author_id"], ["User.id"],),
         sa.PrimaryKeyConstraint("id"),
     )
-    # TODO: add like and heart
     op.create_table(
         "Comment",
         sa.Column("id", sa.Integer(), nullable=False),
@@ -61,13 +63,13 @@ def upgrade():
         sa.ForeignKeyConstraint(["post_id"], ["Post.id"],),
         sa.PrimaryKeyConstraint("id"),
     )
-    # TODO: add like and heart
     op.create_table(
         "Follow",
         sa.Column("follower_id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(["follower_id"], ["User.id"],),
         sa.Column("following_id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(["following_id"], ["User.id"],),
+        sa.PrimaryKeyConstraint("follower_id", "following_id"),
     )
     op.create_table(
         "Profile",
@@ -77,6 +79,9 @@ def upgrade():
         sa.Column("about_me", sa.String(), nullable=False),
         sa.Column("member_since", sa.TIMESTAMP(), server_default=sa.func.now()),
         sa.Column("last_seen", sa.TIMESTAMP(), server_default=sa.func.now()),
+        sa.Column("avatar", sa.LargeBinary(), nullable=True),
+        sa.Column("content_type", sa.String(), nullable=True),
+        sa.PrimaryKeyConstraint("id"),
     )
 
 

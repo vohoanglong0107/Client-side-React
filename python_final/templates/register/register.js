@@ -16,17 +16,17 @@ registerForm.addEventListener("submit", e => {
     }
     
     // TODO: send axios signup request with username, email and password
-    axios.post("...", {username: username, email: email, password: password}).then((res) => {
-        if (res.data.message === 'Register successful!'){
-            axios.defaults.headers.common['Authorization'] = res.data.token;
-            parent.location='/templates/auth/login.html' // Link to login page
+    axios.post("/api/v1/users/register", {username: username, email: email, password: password, role_id: 2}).then((res) => {
+        if (res.status === 200){
+            parent.location='/login' // Link to login page
         }
         else {
             resetInput();
-            alert(res.data.message);
+            alert(res.data.msg);
         }
     }).catch(e => {
         console.log(e);
+        alert(e.response.data.msg);
     })
 });
 

@@ -1,7 +1,7 @@
 from sqlalchemy import func
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql.schema import ForeignKey, Column
-from sqlalchemy.sql.sqltypes import Integer, String, TIMESTAMP
+from sqlalchemy.sql.sqltypes import LargeBinary, Integer, String, TIMESTAMP
 
 from python_final.db.base_class import Base
 
@@ -15,3 +15,5 @@ class Profile(Base):
     about_me = Column(String, default='')
     member_since = Column(TIMESTAMP, server_default=func.now())
     last_seen = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
+    avatar = Column(LargeBinary, nullable=True)
+    content_type = Column(String, nullable=True)

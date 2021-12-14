@@ -5,5 +5,6 @@ from marshmallow import Schema, fields
 class PostSchema(Schema):
     id = fields.Int(required=True)
     body = fields.Str(required=True)
-    author = fields.Nested("UserSchema", only=("id", "username"), required=True)
-    # TODO: add like and heart
+    timestamp = fields.DateTime(required=True)
+    heart_count = fields.Int(required=True)
+    author = fields.Nested("UserSchema", only=("id", "email", "username"), required=True)

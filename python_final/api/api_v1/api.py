@@ -10,3 +10,6 @@ from .api_docs import docs
 from .endpoints import role
 from .endpoints import token
 from .endpoints import user
+from .endpoints import post
+from .endpoints import comment
+from .endpoints import profile

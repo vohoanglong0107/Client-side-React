@@ -15,6 +15,7 @@ from python_final.db.utils import (
     create_comment,
     delete_comment,
     get_comment_by_post_id,
+    get_user_id,
     update_comment,
 )
 
@@ -31,7 +32,7 @@ from python_final.models.roles import Role
 
 
 @docs.register
-@doc(description="Create new comment", tags=["posts"])
+@doc(description="Create new comment", security=security_params, tags=["posts"])
 @app.route(f"{config.API_V1_STR}/comments/create", methods=["POST"])
 @use_kwargs(
     {
@@ -41,17 +42,17 @@ from python_final.models.roles import Role
 )
 @marshal_with(CommentSchema())
 @jwt_required()
-def route_create_posts(body, post_id):
+def route_create_comments(body, post_id):
     current_user = get_current_user()
     if not current_user:
         abort(400, "Could not authenticate user with provided token")
 
-    user = create_comment(db_session, body, post_id, current_user.id)
+    user = create_comment(db_session, body, post_id, get_user_id(current_user))
     return user
 
 
 @docs.register
-@doc(description="Update comment", tags=["posts"])
+@doc(description="Update comment", security=security_params, tags=["posts"])
 @app.route(f"{config.API_V1_STR}/comments/update", methods=["POST"])
 @use_kwargs(
     {
@@ -61,7 +62,7 @@ def route_create_posts(body, post_id):
 )
 @marshal_with(CommentSchema())
 @jwt_required()
-def route_update_posts(id, body):
+def route_update_comments(id, body):
     current_user = get_current_user()
     if not current_user:
         abort(400, "Could not authenticate user with provided token")
@@ -71,7 +72,7 @@ def route_update_posts(id, body):
 
 
 @docs.register
-@doc(description="Get comments by post id", tags=["posts"])
+@doc(description="Get comments by post id", security=security_params, tags=["posts"])
 @app.route(f"{config.API_V1_STR}/comments/get", methods=["GET"])
 @use_kwargs(
     {
@@ -80,7 +81,7 @@ def route_update_posts(id, body):
 )
 @marshal_with(CommentSchema())
 @jwt_required()
-def route_update_posts(id):
+def route_get_comments(id):
     current_user = get_current_user()
     if not current_user:
         abort(400, "Could not authenticate user with provided token")
@@ -90,7 +91,7 @@ def route_update_posts(id):
 
 
 @docs.register
-@doc(description="delete comment", tags=["posts"])
+@doc(description="delete comment", security=security_params, tags=["posts"])
 @app.route(f"{config.API_V1_STR}/comments/delete", methods=["POST"])
 @use_kwargs(
     {
@@ -99,7 +100,7 @@ def route_update_posts(id):
 )
 @marshal_with(CommentSchema())
 @jwt_required()
-def route_delete_posts(id):
+def route_delete_comments(id):
     current_user = get_current_user()
     if not current_user:
         abort(400, "Could not authenticate user with provided token")
