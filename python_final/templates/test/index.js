@@ -5,66 +5,69 @@ axios.defaults.headers.common["Authorization"] =
   "Bearer " + window.localStorage.getItem("token");
 
 const data = [
-	{
-		postID: 0,
-		avatar: "",
-		username: "thanhcute",
-		content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-		loves: 2,
-		comments: 2,
-		commentText: [{
-			avatar: "../assets/3135715.png",
-			username: "thanhcute02",
-			comment: "great Sum!"
-		},
-		{
-			avatar: "../assets/3135715.png",
-			username: "thanhcute01",
-			comment: "nice",
-		}
-		]
-	},
-	{
-	postID: 1,
-	avatar: "",
-	username: "thanhcute02",
-	content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-	loves: 0,
-	comments : 0,
-	commentText: []
-},
-{
-	postID: 2,
-	avatar: "",
-	username: "thanhcute03",
-	content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-	loves: 12,
-	comments: 4,
-	commentText: [
-		{
-			avatar: "../assets/3135715.png",
-			username: "thanhcute02",
-			comment: "great Sum!"
-		},
-		{
-			avatar: "../assets/3135715.png",
-			username: "thanhcute03",
-			comment: "great Sum! ayoooooooooooooooooo"
-		},
-		{
-			avatar: "../assets/3135715.png",
-			username: "thanhcute04",
-			comment: "niceeeeeeeeeeeeeeeeeeeeeeeeeee"
-		},
-		{
-			avatar: "../assets/3135715.png",
-			username: "thanhcute05",
-			comment: "great Summmmmmmmmmmmmmmmmmmmm!"
-		}
-	]
-}
-	
-]
+  {
+    postID: 0,
+    avatar: "",
+    username: "thanhcute",
+    content:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    loves: 2,
+    comments: 2,
+    commentText: [
+      {
+        avatar: "../assets/3135715.png",
+        username: "thanhcute02",
+        comment: "great Sum!",
+      },
+      {
+        avatar: "../assets/3135715.png",
+        username: "thanhcute01",
+        comment: "nice",
+      },
+    ],
+  },
+  {
+    postID: 1,
+    avatar: "",
+    username: "thanhcute02",
+    content:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    loves: 0,
+    comments: 0,
+    commentText: [],
+  },
+  {
+    postID: 2,
+    avatar: "",
+    username: "thanhcute03",
+    content:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    loves: 12,
+    comments: 4,
+    commentText: [
+      {
+        avatar: "../assets/3135715.png",
+        username: "thanhcute02",
+        comment: "great Sum!",
+      },
+      {
+        avatar: "../assets/3135715.png",
+        username: "thanhcute03",
+        comment: "great Sum! ayoooooooooooooooooo",
+      },
+      {
+        avatar: "../assets/3135715.png",
+        username: "thanhcute04",
+        comment: "niceeeeeeeeeeeeeeeeeeeeeeeeeee",
+      },
+      {
+        avatar: "../assets/3135715.png",
+        username: "thanhcute05",
+        comment: "great Summmmmmmmmmmmmmmmmmmmm!",
+      },
+    ],
+  },
+];
 
 const App = () => {
   return (
@@ -337,7 +340,7 @@ const Home = () => {
   );
 };
 const Profile = () => {
-  const [ isUser, setIsUser ] = useState(true)
+  const [isUser, setIsUser] = useState(true);
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -460,11 +463,20 @@ const Profile = () => {
                 Following: {following}
                 <i class="fa fa-user icon" aria-hidden="true"></i>
               </label>
-              {isUser? "" : (
-                            <button onClick={()=>setIsFollowed(!isFollowed)} class={isFollowed? 'follow-button is-followed' : 'follow-button is-not-followed' }>
-                                {isFollowed? <p>Followed</p> : <p>Follow</p> }
-                            </button>
-                        )}
+              {isUser ? (
+                ""
+              ) : (
+                <button
+                  onClick={() => setIsFollowed(!isFollowed)}
+                  class={
+                    isFollowed
+                      ? "follow-button is-followed"
+                      : "follow-button is-not-followed"
+                  }
+                >
+                  {isFollowed ? <p>Followed</p> : <p>Follow</p>}
+                </button>
+              )}
             </div>
             <div class="buttons">
               <button
