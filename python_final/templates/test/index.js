@@ -70,12 +70,13 @@ const App = () => {
 		<ReactRouterDOM.HashRouter>
 			<Route exact path="/" component={Home} />
 			<Route exact path="/profile" component={Profile} />
-			<Route exact path="/search" component={Search} />
+			<Route exact path="/search/:txtSearch" component={Search} />
 		</ReactRouterDOM.HashRouter>
 	)
 }
 
 const Navbar = () => {
+	const [ txtSearch, setTxtSearch ] = useState("");
 	return (
 		<nav class="navbar navbar-expand-lg navContainer">
 			<a class="navBrand" href="#">Blog</a>
@@ -85,15 +86,19 @@ const Navbar = () => {
 
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<form class="form-inline my-2 my-lg-0">
-					<input class="form-control search-bar" type="search" placeholder="Search" aria-label="Search"/>
-					<button class="btn my-2 my-sm-0 search-button" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+					<input class="form-control search-bar" type="search" placeholder="Search" aria-label="Search" value={txtSearch} onChange={e => setTxtSearch(e.target.value)} />
+					<button class="btn my-2 my-sm-0 search-button" type="submit">
+						<Link to={"/search/" + txtSearch}>
+							<i class="fa fa-search" aria-hidden="true"/>
+						</Link>
+					</button>
 				</form>
 				<ul class="dropdown">
 					<li>
 						<button class="dropbtn profile-icon-button" ><img src="../assets/3135715.png" alt="user-icon" class="user-icon dropdown-toggle"/></button>
 						<div  class="dropdown-content">
 							<Link to="/profile">Profile</Link>
-							<a href="#" >Logout</a>
+							<a href="#">Logout</a>
 						</div>
 					</li>
 				</ul>
@@ -335,8 +340,9 @@ const Profile = () => {
 	);
 }
 
-const Search = () => {
+const Search = (props) => {
 	const [ listUser, setListUser ] = useState([]);
+	const txtSearch = props.match.params.txtSearch;
 
 	useEffect(() => {
 		// const txtSearch = localStorage.getItem("txtSearch");
