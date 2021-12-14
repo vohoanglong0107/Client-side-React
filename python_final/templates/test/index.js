@@ -500,4 +500,70 @@ const Profile = () => {
   );
 };
 
-ReactDOM.render(<App />, document.querySelector("#root"));
+const Search = (props) => {
+	const [ listUser, setListUser ] = useState([]);
+	const txtSearch = props.match.params.txtSearch;
+
+	useEffect(() => {
+		// const txtSearch = localStorage.getItem("txtSearch");
+		// if (txtSearch !== "") {
+		// 	document.getElementsByClassName("search-bar").value = txtSearch;
+
+		// 	axios.post("...", {txtSearch: txtSearch}).then(res => {
+		// 		setListUser(res.data) 
+		// 	}).catch(e => {
+		// 		console.log(e);
+		// 	});
+		// }
+		setListUser([
+			{
+				id: 1,
+				avatar: "https://ict-imgs.vgcloud.vn/2020/09/01/19/huong-dan-tao-facebook-avatar.jpg",
+				username: "Tuan Kiet",
+				email: "tuankietnk2001@gmail.com",
+				num_following: 50,
+				num_followed: 100,
+				is_followed: true,
+			},
+			{
+				id: 2,
+				avatar: "https://ict-imgs.vgcloud.vn/2020/09/01/19/huong-dan-tao-facebook-avatar.jpg",
+				username: "Hoang Long",
+				email: "hoanglong@gmail.com",
+				num_following: 50,
+				num_followed: 100,
+				is_followed: false
+			}
+		])
+	}, [])
+
+	return (
+		<div class="body-container">
+			<header>
+				<Navbar />
+			</header>
+			<main>
+				<div id="users-container">
+					{
+						listUser.map(user => {
+							return (
+								<div class="user-div" id={user.id}>
+									<img class="avatar" src={user.avatar}/>
+									<div class="user-info-div">
+										<p class="user-info-bold">{user.username}</p>
+										<p class="user-info">Email: {user.email}</p>
+										<p class="user-info">Following {user.num_following}</p>
+										<p class="user-info">{user.num_followed} followed</p>
+									</div>
+									{!user.is_followed && <i class="fa fa-plus-circle btn-follow" />}
+								</div>
+							)
+						})
+					}
+				</div>
+			</main>
+		</div>
+	);
+}
+
+ReactDOM.render(<App />, document.querySelector('#root'));
