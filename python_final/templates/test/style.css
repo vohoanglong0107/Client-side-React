@@ -144,8 +144,6 @@ body {
     font-weight: bold;
 }
 
-
-
 .image {
     border-radius: 5rem;
     height: 150px;
@@ -356,5 +354,40 @@ input[type="file"] { display: none; }
 
 .list-cmts {
     padding: 15px 0px;
+}
 
+.follow-button {
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: bold;
+    color: #fff;
+    padding: auto;
+    height: 30px;
+    min-width: 100px;
+    margin-left: 230px;
+    border-radius: 0.5rem;
+}
+.follow-button:focus {
+    outline: none;
+}
+
+.is-followed {  
+    background-color: #EEEEEE;
+    border: 1px solid #EEEEEE;
+    color: darkgray;
+}
+
+.is-followed:hover {
+
+}
+
+.is-not-followed {
+    background-color: #3282B8;
+    border: 2px solid #3282B8;
+}
+.is-not-followed:hover {
+    background-color: #FDB827;
+    border-color: #FDB827;
+}
+.is-not-followed:focus {
+    outline: none;
 }
