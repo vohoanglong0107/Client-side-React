@@ -32,16 +32,15 @@ from python_final.models.users import User
 @app.route(f"{config.API_V1_STR}/profiles/update", methods=["PUT"])
 @use_kwargs(
     {
-        "username": fields.Str(required=False),
-        "email": fields.Str(required=False),
-        "password": fields.Str(required=False),
-        "role_id": fields.Integer(required=False),
+        "fullname": fields.Str(required=False),
+        "location": fields.Str(required=False),
+        "about_me": fields.Str(required=False),
     },
     location="form",
 )
 @marshal_with(ProfileSchema())
 @jwt_required()
-def route_profile_id_put(username=None, email=None, password=None, role_id=None):
+def route_profile_id_put(fullname=None, location=None, about_me=None):
     current_user: User = get_current_user()
 
     avatar = request.files.get("avatar")
@@ -49,7 +48,7 @@ def route_profile_id_put(username=None, email=None, password=None, role_id=None)
     if not current_user:
         abort(400, "Could not authenticate user with provided token")
 
-    profile = update_profile_by_id(db_session, get_user_id(current_user), username, email, password, role_id, avatar)
+    profile = update_profile_by_id(db_session, get_user_id(current_user), fullname, location, about_me, avatar)
     return profile
 
 

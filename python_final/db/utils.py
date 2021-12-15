@@ -1,7 +1,6 @@
 import base64
 
 from sqlalchemy.orm import joinedload
-from sqlalchemy.dialects import sqlite
 from python_final.models.posts import Post
 from python_final.models.profiles import Profile
 from python_final.models.users import User
@@ -114,19 +113,17 @@ def get_profile_by_id(db_session, user_id) -> Profile:
 
 
 def update_profile_by_id(
-    db_session, user_id, username, email, password, role_id, avatar
+    db_session, user_id, fullname, location, about_me, avatar
 ):
     avatar_bytes = base64.b64encode(avatar.read()) if avatar else None
     content_type = avatar.content_type if avatar else None
     profile = get_profile_by_id(db_session, user_id)
-    if username is not None:
-        profile.username = username
-    if email is not None:
-        profile.email = email
-    if password is not None:
-        profile.password_hash = get_password_hash(password)
-    if role_id is not None:
-        profile.role_id = role_id
+    if fullname is not None:
+        profile.fullname = fullname
+    if location is not None:
+        profile.location = location
+    if about_me is not None:
+        profile.about_me = about_me
     if avatar_bytes is not None:
         profile.avatar = avatar_bytes
     if content_type is not None:

@@ -315,9 +315,9 @@ const Profile = (props) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageURL, setSelectedImageURL] = useState(null);
   const [inputs, setInputs] = useState({
-    email: "",
-    username: "",
-    password: "",
+    fullname: "",
+    location: "",
+    about_me: "",
   });
   useEffect(async () => {
     const currentUser = (await axios.get("/api/v1/users/me")).data;
@@ -335,8 +335,9 @@ const Profile = (props) => {
 
     setInputs({
       ...inputs,
-      email: profileUser.email,
-      username: profileUser.username,
+      fullname: profileUser.profile.fullname,
+      location: profileUser.profile.location,
+      about_me: profileUser.profile.about_me,
     });
     setSelectedImageURL();
     setFollowers(profileUser.number_of_followers || 0);
@@ -367,9 +368,9 @@ const Profile = (props) => {
     const formData = new FormData();
     if (selectedImage)
       formData.append("avatar", selectedImage, selectedImage.name);
-    if (inputs.username !== "") formData.append("username", inputs.username);
-    if (inputs.email !== "") formData.append("email", inputs.email);
-    if (inputs.password !== "") formData.append("password", inputs.password);
+    formData.append("fullname", inputs.fullname);
+    formData.append("location", inputs.location);
+    formData.append("about_me", inputs.about_me);
 
     let result = await axios.put("/api/v1/profiles/update", formData);
     setSelectedImageURL(
@@ -421,37 +422,38 @@ const Profile = (props) => {
           <form class="inputs-form" onSumit>
             <div class="inputs-field container">
               <div class="input-div row">
-                <label class="labels col-4">Email:</label>
+                <label class="labels col-4">Fullname:</label>
                 <input
                   class="inputs col-8"
                   type="text"
-                  placeholder="your email..."
-                  value={inputs.email}
+                  placeholder="your fullname..."
+                  value={inputs.fullname}
                   onChange={(e) =>
-                    setInputs({ ...inputs, email: e.target.value })
+                    setInputs({ ...inputs, fullname: e.target.value })
                   }
                 />
               </div>
               <div class="input-div row">
-                <label class="labels col-4">Username:</label>
+                <label class="labels col-4">Location:</label>
                 <input
                   class="inputs col-8"
                   type="text"
-                  placeholder="your username..."
-                  value={inputs.username}
+                  placeholder="your location..."
+                  value={inputs.location}
                   onChange={(e) =>
-                    setInputs({ ...inputs, username: e.target.value })
+                    setInputs({ ...inputs, location: e.target.value })
                   }
                 />
               </div>
               <div class="input-div row">
-                <label class="labels col-4">Password:</label>
+                <label class="labels col-4">About me:</label>
                 <input
                   class="inputs col-8"
-                  type="password"
-                  placeholder="your password..."
+                  type="text"
+                  placeholder="About me..."
+                  value={inputs.about_me}
                   onChange={(e) =>
-                    setInputs({ ...inputs, password: e.target.value })
+                    setInputs({ ...inputs, about_me: e.target.value })
                   }
                 />
               </div>
