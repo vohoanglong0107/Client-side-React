@@ -33,22 +33,21 @@ from python_final.models.roles import Role
 
 @docs.register
 @doc(description="Create new comment", security=security_params, tags=["posts"])
-@app.route(f"{config.API_V1_STR}/comments/create", methods=["POST"])
+@app.route(f"{config.API_V1_STR}/comments/create/<int:post_id>", methods=["POST"])
 @use_kwargs(
     {
         "body": fields.Str(required=True),
-        "post_id": fields.Int(required=True),
     }
 )
 @marshal_with(CommentSchema())
 @jwt_required()
-def route_create_comments(body, post_id):
+def route_create_comments(post_id, body):
     current_user = get_current_user()
     if not current_user:
         abort(400, "Could not authenticate user with provided token")
 
-    user = create_comment(db_session, body, post_id, get_user_id(current_user))
-    return user
+    comment = create_comment(db_session, body, post_id, get_user_id(current_user))
+    return comment
 
 
 @docs.register
@@ -67,8 +66,8 @@ def route_update_comments(id, body):
     if not current_user:
         abort(400, "Could not authenticate user with provided token")
 
-    user = update_comment(db_session, id, body)
-    return user
+    comment = update_comment(db_session, id, body)
+    return comment
 
 
 @docs.register
@@ -86,8 +85,8 @@ def route_get_comments(id):
     if not current_user:
         abort(400, "Could not authenticate user with provided token")
 
-    user = get_comment_by_post_id(db_session, id)
-    return user
+    comment = get_comment_by_post_id(db_session, id)
+    return comment
 
 
 @docs.register
@@ -105,5 +104,5 @@ def route_delete_comments(id):
     if not current_user:
         abort(400, "Could not authenticate user with provided token")
 
-    user = delete_comment(db_session, id)
-    return user
+    comment = delete_comment(db_session, id)
+    return comment

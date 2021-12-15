@@ -26,12 +26,13 @@ class User(Base):
         secondary=Follow,
         primaryjoin=id == Follow.c.follower_id,
         secondaryjoin=id == Follow.c.following_id,
-        back_populates="followers",
+        # back_populates="followers",
+        backref="followers"
     )
-    followers = relationship(
-        "User",
-        secondary=Follow,
-        primaryjoin=id == Follow.c.follower_id,
-        secondaryjoin=id == Follow.c.following_id,
-        back_populates="following",
-    )
+    # followers = relationship(
+    #     "User",
+    #     secondary=Follow,
+    #     primaryjoin=id == Follow.c.following_id,
+    #     secondaryjoin=id == Follow.c.follower_id,
+    #     back_populates="following",
+    # )

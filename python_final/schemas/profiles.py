@@ -5,6 +5,8 @@ from marshmallow import Schema, fields, ValidationError
 
 class BytesField(fields.Field):
     def _serialize(self, value: bytes, attr: str, obj: typing.Any, **kwargs):
+        if value is None:
+            return value
         if not isinstance(value, bytes):
             raise ValidationError('Invalid input type.')
         return value.decode('utf-8')

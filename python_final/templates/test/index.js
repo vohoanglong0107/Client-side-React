@@ -4,81 +4,39 @@ const { useState, useEffect } = React;
 axios.defaults.headers.common["Authorization"] =
   "Bearer " + window.localStorage.getItem("token");
 
-const data = [
-  {
-    postID: 0,
-    avatar: "",
-    username: "thanhcute",
-    content:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-    loves: 2,
-    comments: 2,
-    commentText: [
-      {
-        avatar: "../assets/3135715.png",
-        username: "thanhcute02",
-        comment: "great Sum!",
-      },
-      {
-        avatar: "../assets/3135715.png",
-        username: "thanhcute01",
-        comment: "nice",
-      },
-    ],
-  },
-  {
-    postID: 1,
-    avatar: "",
-    username: "thanhcute02",
-    content:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-    loves: 0,
-    comments: 0,
-    commentText: [],
-  },
-  {
-    postID: 2,
-    avatar: "",
-    username: "thanhcute03",
-    content:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-    loves: 12,
-    comments: 4,
-    commentText: [
-      {
-        avatar: "../assets/3135715.png",
-        username: "thanhcute02",
-        comment: "great Sum!",
-      },
-      {
-        avatar: "../assets/3135715.png",
-        username: "thanhcute03",
-        comment: "great Sum! ayoooooooooooooooooo",
-      },
-      {
-        avatar: "../assets/3135715.png",
-        username: "thanhcute04",
-        comment: "niceeeeeeeeeeeeeeeeeeeeeeeeeee",
-      },
-      {
-        avatar: "../assets/3135715.png",
-        username: "thanhcute05",
-        comment: "great Summmmmmmmmmmmmmmmmmmmm!",
-      },
-    ],
-  },
-];
+const URIForBase64AndContentType = (base64, contentType) => {
+  return `data:${contentType};base64,${base64}`;
+};
+
+const defaultAvatar = "../assets/3135715.png";
+
+const AvatarOrDefault = (avatar, content_type) => {
+  if (avatar) return URIForBase64AndContentType(avatar, content_type);
+  else return defaultAvatar;
+};
 
 const App = () => {
   return (
     <ReactRouterDOM.HashRouter>
       <Route exact path="/" component={Home} />
-      <Route exact path="/profile" component={Profile} />
+      <Route exact path="/profile/:userId" component={Profile} />
+      <Route exact path="/search/:txtSearch" component={Search} />
     </ReactRouterDOM.HashRouter>
   );
 };
 
 const Navbar = () => {
+  const [txtSearch, setTxtSearch] = useState("");
+  const [avatar, setAvatar] = useState();
+  const [userId, setUserId] = useState();
+  const [contentType, setContentType] = useState();
+  useEffect(async () => {
+    axios.get("/api/v1/users/me").then((response) => {
+      setAvatar(response.data.profile.avatar);
+      setContentType(response.data.profile.content_type);
+      setUserId(response.data.id);
+    });
+  }, []);
   return (
     <nav class="navbar navbar-expand-lg navContainer">
       <a class="navBrand" href="#">
@@ -103,23 +61,27 @@ const Navbar = () => {
             type="search"
             placeholder="Search"
             aria-label="Search"
+            value={txtSearch}
+            onChange={(e) => setTxtSearch(e.target.value)}
           />
           <button class="btn my-2 my-sm-0 search-button" type="submit">
-            <i class="fa fa-search" aria-hidden="true"></i>
+            <Link to={"/search/" + txtSearch}>
+              <i class="fa fa-search" aria-hidden="true"></i>
+            </Link>
           </button>
         </form>
         <ul class="dropdown">
           <li>
             <button class="dropbtn profile-icon-button">
               <img
-                src="../assets/3135715.png"
+                src={AvatarOrDefault(avatar, contentType)}
                 alt="user-icon"
                 class="user-icon dropdown-toggle"
               />
             </button>
             <div class="dropdown-content">
-              <Link to="/profile">Profile</Link>
-              <a href="#">Logout</a>
+              <Link to={"/profile/" + userId}>Profile</Link>
+              <a href="/">Logout</a>
             </div>
           </li>
         </ul>
@@ -130,82 +92,96 @@ const Navbar = () => {
 
 const Home = () => {
   const username = "thanhcute";
-  const [datas, setDatas] = useState(data);
+  const [datas, setDatas] = useState([]);
   const [input, setInput] = useState("");
+  const [avatar, setAvatar] = useState();
+  const [contentType, setContentType] = useState();
 
-  // const [ newPost, setNewPost ] = useState({
-  // 	avatar: "",
-  // 	username: "",
-  // 	content: "",
-  // 	loves: 0,
-  // 	comments: 0,
-  // 	comment: []
-  // })
+  useEffect(() => {
+    getPosts();
+    axios.get("/api/v1/users/me").then((result) => {
+      setAvatar(result.data.profile.avatar);
+      setContentType(result.data.profile.content_type);
+    });
+  }, []);
+
+  const getPosts = async () => {
+    const posts = (await axios.get("/api/v1/posts/get")).data;
+    console.log("posts", posts);
+    setDatas(posts);
+  };
+  // TODO get posts
 
   const handleAddPost = async () => {
+    if (input === "") return;
     let obj = {
       body: input,
     };
-    axios.post("/api/post", obj).then((res) => {
-      console.log(res);
+    await axios.post("/api/v1/posts/create", obj).then((res) => {
       setInput("");
-      window.location.reload();
     });
-    // setDatas((prevData) => {
-    //   return [...prevData, obj];
-    // });
-    // console.log(datas);
-    setInput("");
+    getPosts();
   };
 
   const Post = (props) => {
+    const { currentUserAvatar, currentUserContentType } = props.currentUser;
+    const { avatar, content_type } = props.author.profile;
+    const { username } = props.author;
+    const { postID } = props;
     const [react, setReact] = useState(false);
     const [visible, setVisible] = useState(false);
     const [showCmts, setShowCmts] = useState(false);
     const [numberOfLoves, setNumberOfLoves] = useState(props.loves);
     const [newComment, setNewComment] = useState("");
-    const [numberOfComments, setNumberOfComments] = useState(props.comments);
-    const [listComments, setListComments] = useState(props.commentText);
-    const [count, setCount] = useState([]);
-    useEffect(() => {
-      console.log("run", showCmts);
-    }, [count]);
-    const handleHearted = (postID) => {
-      console.log("postID", postID);
+    const [numberOfComments, setNumberOfComments] = useState(
+      props.comments.length
+    );
+    const [listComments, setListComments] = useState(props.comments);
 
-      datas.forEach((item) => {
-        if (item.postID === postID) {
-          !react ? (item.loves += 1) : (item.loves -= 1);
-          setNumberOfLoves(item.loves);
-        }
-      });
+    const handleHearted = () => {
+      console.log("postID", postID);
+      if (react) {
+        axios.delete(`/api/v1/posts/react/${postID}`).then((res) => {
+          setReact(false);
+          setNumberOfLoves(numberOfLoves - 1);
+        });
+      } else {
+        axios.post(`/api/v1/posts/react/${postID}`).then((res) => {
+          setReact(true);
+          setNumberOfLoves(numberOfLoves + 1);
+        });
+      }
     };
-    const handleEnter = (event, postID) => {
+    const handleEnter = (event) => {
       console.log("post id", postID);
       if (event.key === "Enter") {
         console.log("comment!");
-        datas.forEach((item) => {
-          console.log("go");
-          if (item.postID === postID) {
-            console.log("item post id", item.postID);
-            item.comments += 1;
-            setNumberOfComments(item.comments);
-            setListComments((prevComments) => {
-              return [...prevComments, newComment];
-            });
-          }
-        });
+        if (newComment === "") return;
+        axios
+          .post(`/api/v1/comments/create/${postID}`, {
+            body: newComment,
+          })
+          .then((res) => {
+            setNewComment("");
+            setNumberOfComments(numberOfComments + 1);
+            setListComments([...listComments, res.data]);
+          });
       }
-      setNewComment("");
     };
 
     const Comment = (props) => {
+      const { avatar, content_type } = props.author.profile;
+      const { username } = props.author;
       return (
         <div class="comment-container">
-          <img src={props.avatar} alt="avatar" class="comment-avatar" />
+          <img
+            src={AvatarOrDefault(avatar, content_type)}
+            alt="avatar"
+            class="comment-avatar"
+          />
           <div class="comment-value">
-            <p class="user-comment-username">{props.username}</p>
-            <p class="comment-text">{props.comment}</p>
+            <p class="user-comment-username">{username}</p>
+            <p class="comment-text">{props.body}</p>
           </div>
         </div>
       );
@@ -214,23 +190,20 @@ const Home = () => {
       <div class="post-container">
         <div class="ava-name">
           <img
-            src="../assets/3135715.png"
+            src={AvatarOrDefault(avatar, content_type)}
             alt="user-avatar"
             class="user-avatar"
           />
-          <p class="username">{props.username}</p>
+          <p class="username">{username}</p>
         </div>
         <p class="content">
-          <strong>{props.content}</strong>
+          <strong>{props.body}</strong>
         </p>
         <hr class="hr" />
         <div class="react">
           <button
             class={!react ? "react-button heart" : "react-button hearted"}
-            onClick={() => {
-              setReact(!react);
-              handleHearted(props.postID);
-            }}
+            onClick={handleHearted}
           >
             <i class="fa fa-heart-o react-icon" aria-hidden="true"></i>
             {numberOfLoves}
@@ -246,29 +219,22 @@ const Home = () => {
         {visible ? (
           <div class="comment-div">
             <img
-              src="../assets/3135715.png"
+              src={AvatarOrDefault(currentUserAvatar, currentUserContentType)}
               alt="avatar"
               class="comment-avatar"
             />
             <input
               placeholder="write comment..."
               class="comment-input"
+              value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              onKeyDown={(event) => {
-                handleEnter(event, props.postID);
-              }}
+              onKeyDown={handleEnter}
             />
 
             {showCmts ? (
               <div class="list-cmts">
                 {listComments.map((item) => {
-                  return (
-                    <Comment
-                      comment={item.comment}
-                      avatar={item.avatar}
-                      username={item.username}
-                    />
-                  );
+                  return <Comment body={item.body} author={item.author} />;
                 })}
               </div>
             ) : (
@@ -276,9 +242,6 @@ const Home = () => {
                 class="show-all-cmts"
                 onClick={() => {
                   setShowCmts(true);
-                  setCount((prevCount) => {
-                    return [...prevCount, count + 1];
-                  });
                   console.log("showCmts", showCmts);
                 }}
               >
@@ -301,7 +264,7 @@ const Home = () => {
       <main>
         <div class="news">
           <img
-            src="../assets/3135715.png"
+            src={AvatarOrDefault(avatar, contentType)}
             alt="user-icon"
             class="user-avatar"
           />
@@ -325,12 +288,16 @@ const Home = () => {
           {datas.map((item) => {
             return (
               <Post
-                username={item.username}
-                postID={item.postID}
-                commentText={item.commentText}
-                content={item.content}
-                loves={item.loves}
+                key={item.id}
+                author={item.author}
+                postID={item.id}
+                body={item.body}
+                loves={item.heart_count}
                 comments={item.comments}
+                currentUser={{
+                  currentUserAvatar: avatar,
+                  currentUserContentType: contentType,
+                }}
               />
             );
           })}
@@ -339,8 +306,10 @@ const Home = () => {
     </div>
   );
 };
-const Profile = () => {
+const Profile = (props) => {
+  const userId = props.match.params.userId;
   const [isUser, setIsUser] = useState(true);
+  const [isFollowed, setIsFollowed] = useState(false);
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -352,14 +321,34 @@ const Profile = () => {
   });
   useEffect(async () => {
     const currentUser = (await axios.get("/api/v1/users/me")).data;
+    const profileUser = (await axios.get("/api/v1/users/" + userId)).data;
+
+    if (currentUser.id == userId) {
+      setIsUser(true);
+    } else {
+      setIsUser(false);
+      const isFollowing = (
+        await axios.get(`/api/v1/users/${userId}/isFollowing/`)
+      ).data.msg;
+      setIsFollowed(isFollowing);
+    }
+
     setInputs({
       ...inputs,
-      email: currentUser.email,
-      username: currentUser.username,
+      email: profileUser.email,
+      username: profileUser.username,
     });
-    setFollowers(currentUser.number_of_followers || 0);
-    setFollowing(currentUser.number_of_following || 0);
-  }, []);
+    setSelectedImageURL();
+    setFollowers(profileUser.number_of_followers || 0);
+    setFollowing(profileUser.number_of_following || 0);
+    if (profileUser.profile.avatar)
+      setSelectedImageURL(
+        URIForBase64AndContentType(
+          profileUser.profile.avatar,
+          profileUser.profile.content_type
+        )
+      );
+  }, [userId]);
 
   const handleUploadImage = async (event) => {
     const image = event.target.files[0];
@@ -376,15 +365,29 @@ const Profile = () => {
   };
   const handleOnSubmit = async (event) => {
     const formData = new FormData();
-    formData.append("avatar", selectedImage, selectedImage.name);
+    if (selectedImage)
+      formData.append("avatar", selectedImage, selectedImage.name);
     if (inputs.username !== "") formData.append("username", inputs.username);
     if (inputs.email !== "") formData.append("email", inputs.email);
     if (inputs.password !== "") formData.append("password", inputs.password);
 
     let result = await axios.put("/api/v1/profiles/update", formData);
     setSelectedImageURL(
-      `data:${result.data.content_type};base64,${result.data.avatar}`
+      URIForBase64AndContentType(result.data.avatar, result.data.content_type)
     );
+  };
+  const handleFollow = () => {
+    if (isFollowed) {
+      axios.post(`/api/v1/users/${userId}/unfollow/`).then((res) => {
+        setIsFollowed(false);
+        setFollowers(followers - 1);
+      });
+    } else {
+      axios.post(`/api/v1/users/${userId}/follow/`).then((res) => {
+        setIsFollowed(true);
+        setFollowers(followers + 1);
+      });
+    }
   };
 
   return (
@@ -395,14 +398,13 @@ const Profile = () => {
       <main>
         <div class="info">
           <div class="img-div">
-            {selectedImageURL && (
-              <img
-                alt="not fount"
-                width={"250px"}
-                class="image"
-                src={selectedImageURL}
-              />
-            )}
+            <img
+              alt="not fount"
+              width={"250px"}
+              class="image"
+              src={selectedImageURL ? selectedImageURL : defaultAvatar}
+            />
+
             <br />
 
             <label class="button-choose-file" for="myImage">
@@ -416,7 +418,7 @@ const Profile = () => {
             />
           </div>
 
-          <form class="inputs-form">
+          <form class="inputs-form" onSumit>
             <div class="inputs-field container">
               <div class="input-div row">
                 <label class="labels col-4">Email:</label>
@@ -467,7 +469,7 @@ const Profile = () => {
                 ""
               ) : (
                 <button
-                  onClick={() => setIsFollowed(!isFollowed)}
+                  onClick={handleFollow}
                   class={
                     isFollowed
                       ? "follow-button is-followed"
@@ -478,21 +480,23 @@ const Profile = () => {
                 </button>
               )}
             </div>
-            <div class="buttons">
-              <button
-                class="profile-button"
-                onsubmit={() => window.location.reload()}
-              >
-                Cancel
-              </button>
-              <button
-                class="profile-button"
-                style={{ backgroundColor: "#FDB827" }}
-                onsubmit={handleOnSubmit}
-              >
-                Save
-              </button>
-            </div>
+            {isUser && (
+              <div class="buttons">
+                <button
+                  class="profile-button"
+                  onClick={() => window.location.reload()}
+                >
+                  Cancel
+                </button>
+                <button
+                  class="profile-button"
+                  style={{ backgroundColor: "#FDB827" }}
+                  onClick={handleOnSubmit}
+                >
+                  Save
+                </button>
+              </div>
+            )}
           </form>
         </div>
       </main>
@@ -501,69 +505,59 @@ const Profile = () => {
 };
 
 const Search = (props) => {
-	const [ listUser, setListUser ] = useState([]);
-	const txtSearch = props.match.params.txtSearch;
+  const [listUser, setListUser] = useState([]);
 
-	useEffect(() => {
-		// const txtSearch = localStorage.getItem("txtSearch");
-		// if (txtSearch !== "") {
-		// 	document.getElementsByClassName("search-bar").value = txtSearch;
+  const txtSearch = props.match.params.txtSearch;
 
-		// 	axios.post("...", {txtSearch: txtSearch}).then(res => {
-		// 		setListUser(res.data) 
-		// 	}).catch(e => {
-		// 		console.log(e);
-		// 	});
-		// }
-		setListUser([
-			{
-				id: 1,
-				avatar: "https://ict-imgs.vgcloud.vn/2020/09/01/19/huong-dan-tao-facebook-avatar.jpg",
-				username: "Tuan Kiet",
-				email: "tuankietnk2001@gmail.com",
-				num_following: 50,
-				num_followed: 100,
-				is_followed: true,
-			},
-			{
-				id: 2,
-				avatar: "https://ict-imgs.vgcloud.vn/2020/09/01/19/huong-dan-tao-facebook-avatar.jpg",
-				username: "Hoang Long",
-				email: "hoanglong@gmail.com",
-				num_following: 50,
-				num_followed: 100,
-				is_followed: false
-			}
-		])
-	}, [])
+  useEffect(() => {
+    axios
+      .get("/api/v1/users/search/" + txtSearch)
+      .then((res) => {
+        console.log(res.data);
+        setListUser(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [txtSearch]);
 
-	return (
-		<div class="body-container">
-			<header>
-				<Navbar />
-			</header>
-			<main>
-				<div id="users-container">
-					{
-						listUser.map(user => {
-							return (
-								<div class="user-div" id={user.id}>
-									<img class="avatar" src={user.avatar}/>
-									<div class="user-info-div">
-										<p class="user-info-bold">{user.username}</p>
-										<p class="user-info">Email: {user.email}</p>
-										<p class="user-info">Following {user.num_following}</p>
-										<p class="user-info">{user.num_followed} followed</p>
-									</div>
-									{!user.is_followed && <i class="fa fa-plus-circle btn-follow" />}
-								</div>
-							)
-						})
-					}
-				</div>
-			</main>
-		</div>
-	);
-}
+  return (
+    <div class="body-container">
+      <header>
+        <Navbar />
+      </header>
+      <main>
+        <div id="users-container">
+          {listUser.map((user) => {
+            return (
+              <Link to={"/profile/" + user.id}>
+                <div class="user-div" id={user.id}>
+                  <img
+                    class="avatar"
+                    src={AvatarOrDefault(
+                      user.profile.avatar,
+                      user.profile.content_type
+                    )}
+                  />
+                  <div class="user-info-div">
+                    <p class="user-info-bold">{user.username}</p>
+                    <p class="user-info">Email: {user.email}</p>
+                    <p class="user-info">
+                      Following {user.number_of_following}
+                    </p>
+                    <p class="user-info">{user.number_of_followers} followed</p>
+                  </div>
+                  {/* {!user.is_followed && (
+                    <i class="fa fa-plus-circle btn-follow" />
+                  )} */}
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </main>
+    </div>
+  );
+};
 
-ReactDOM.render(<App />, document.querySelector('#root'));
+ReactDOM.render(<App />, document.querySelector("#root"));

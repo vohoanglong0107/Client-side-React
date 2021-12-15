@@ -18,8 +18,7 @@ loginForm.addEventListener("submit", e => {
     axios.post("/api/v1/login/access-token", {username: email, password: password}).then((res) => {
         if (res.status === 200){
             localStorage.setItem('token', res.data.access_token);
-            // TODO: redirect to homepage
-            parent.location='/' // Link to home page
+            parent.location='/home' // Link to home page
         }
         else {
             document.getElementById("password").value = ""
@@ -27,5 +26,6 @@ loginForm.addEventListener("submit", e => {
         }
     }).catch(e => {
         console.log(e);
+        alert(e.response.data.msg);
     })
 })

@@ -45,9 +45,9 @@ def upgrade():
     op.create_table(
         "Post",
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("title", sa.String(), nullable=False),
         sa.Column("body", sa.String(), nullable=False),
         sa.Column("heart_count", sa.Integer(), nullable=False, default=0),
+        sa.Column("timestamp", sa.TIMESTAMP(), server_default=sa.func.now(), onupdate=sa.func.now()),
         sa.Column("author_id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(["author_id"], ["User.id"],),
         sa.PrimaryKeyConstraint("id"),
@@ -86,5 +86,9 @@ def upgrade():
 
 
 def downgrade():
+    op.drop_table("Profile")
+    op.drop_table("Follow")
+    op.drop_table("Comment")
+    op.drop_table("Post")
+    op.drop_table("User")
     op.drop_table("Role")
-    pass

@@ -12,11 +12,11 @@ print(Path('.').absolute())
 
 @app.route('/')
 def send_home():
-    return send_from_directory(Path('.') / 'templates' / 'test', 'index.html')
-
-@app.route('/login')
-def send_login():
     return send_from_directory(Path('.') / 'templates' / 'auth', 'login.html')
+
+@app.route('/home')
+def send_login():
+    return send_from_directory(Path('.') / 'templates' / 'test', 'index.html')
 
 @app.route('/register')
 def send_register():

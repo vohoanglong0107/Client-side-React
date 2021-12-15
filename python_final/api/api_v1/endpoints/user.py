@@ -2,7 +2,7 @@
 
 # Import installed modules
 # # Import installed packages
-from flask import abort
+from flask import abort, jsonify
 from webargs import fields
 from flask_apispec import doc, use_kwargs, marshal_with
 from flask_jwt_extended import get_current_user, jwt_required
@@ -14,9 +14,10 @@ from python_final.db.flask_session import db_session
 from python_final.db.utils import (
     follow_user_by_id,
     get_followers_by_user_id,
+    get_following_by_user_id,
     get_user_by_email,
     get_user_id,
-    update_profile_by_id,
+    search_user_by_username_or_email,
     get_user_by_username,
     create_user,
     get_user_by_id,
@@ -91,9 +92,31 @@ def route_users_id_get(user_id):
 
     if not user:
         return abort(400, f"The user with id: {user_id} does not exists")
-    current_user.number_of_followers = len(current_user.followers)
-    current_user.number_of_following = len(current_user.following)
+    user.number_of_followers = len(user.followers)
+    user.number_of_following = len(user.following)
     return user
+
+
+@docs.register
+@doc(
+    description="check is following",
+    security=security_params,
+    tags=["users"],
+)
+@app.route(f"{config.API_V1_STR}/users/<int:user_id>/isFollowing/", methods=["GET"])
+@jwt_required()
+def route_users_check_is_following(user_id):
+    current_user: User = get_current_user()
+
+    if not current_user:
+        abort(400, "Could not authenticate user with provided token")
+
+    user = get_user_by_id(user_id, db_session)
+    if not user:
+        return abort(400, f"The user with id: {user_id} does not exists")
+
+    following = get_following_by_user_id(db_session, get_user_id(current_user))
+    return jsonify({'msg': user in following})
 
 
 @docs.register
@@ -115,7 +138,7 @@ def route_users_follow(user_id):
     if not user:
         return abort(400, f"The user with id: {user_id} does not exists")
 
-    updated_user = follow_user_by_id(db_session, get_user_id(current_user), user_id)
+    updated_user = follow_user_by_id(db_session, user_id, get_user_id(current_user))
     return updated_user
 
 
@@ -138,7 +161,7 @@ def route_users_unfollow(user_id):
     if not user:
         return abort(400, f"The user with id: {user_id} does not exists")
 
-    updated_user = unfollow_user_by_id(db_session, get_user_id(current_user), user_id)
+    updated_user = unfollow_user_by_id(db_session, user_id, get_user_id(current_user))
     return updated_user
 
 
@@ -163,3 +186,24 @@ def route_user_get_followers(user_id):
 
     followers = get_followers_by_user_id(db_session, user_id)
     return followers
+
+
+@docs.register
+@doc(
+    description="search users by username or email",
+    security=security_params,
+    tags=["users"],
+)
+@app.route(f"{config.API_V1_STR}/users/search/<search_text>", methods=["GET"])
+@marshal_with(UserSchema(many=True))
+@jwt_required()
+def route_search_users(search_text):
+    current_user: User = get_current_user()
+    if not current_user:
+        abort(400, "Could not authenticate user with provided token")
+
+    users = search_user_by_username_or_email(db_session, search_text)
+    for user in users:
+        user.number_of_followers = len(user.followers)
+        user.number_of_following = len(user.following)
+    return users
