@@ -1,4 +1,4 @@
-from python_final import __version__
+from react_client_side import __version__
 
 
 def test_version():

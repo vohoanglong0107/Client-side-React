@@ -1,7 +1,7 @@
 import sqlalchemy
 import pytest
-from python_final.schemas import UserCreate
-from python_final.db.flask_session import db_session
+from react_client_side.schemas import UserCreate
+from react_client_side.db.flask_session import db_session
 
 
 def test_create_user():

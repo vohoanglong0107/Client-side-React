@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
-from python_final.db.base import Base
+from react_client_side.db.base import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
