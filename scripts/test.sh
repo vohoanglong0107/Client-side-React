@@ -3,4 +3,4 @@
 set -e
 set -x
 
-pytest --cov=app --cov-report=term-missing app/tests "${@}"
+pytest --cov=react_client_side --cov-report=term-missing react_client_side/tests "${@}"

@@ -2,7 +2,7 @@
 
 set -x
 
-mypy app
-black app --check
-isort --check-only app
+mypy react_client_side
+black react_client_side --check
+isort --check-only react_client_side
 flake8 --max-line-length=88
